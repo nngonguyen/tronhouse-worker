@@ -1,0 +1,4 @@
+dist/**
+src/generated
+client/dist/**
+client/src/generated
