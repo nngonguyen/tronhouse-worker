@@ -1,5 +1,8 @@
 import chokidar from 'chokidar'
 
+import { createShootPostScript, createShootPreScript, getShoot } from './shoots'
+
+// TODO: Get root from api
 const root = '/Users/achilles/Workspaces/resources'
 
 // Watch for original files
@@ -26,16 +29,20 @@ function checkShootStatusByRetouchedFile(filePath: string) {
   return shootId
 }
 
-function publishRunPreAction(shootId: string) {}
-
-function publishRunPostAction(shootId: string) {}
-
-function consumePreAction(shootId: string) {
-  // Step 1: Make Photoshop script jsx file
-  // Step 2: Execute that file
+export async function runScript(scriptPath: string) {
+  console.log(scriptPath)
 }
 
-function consumePostAction(shootId: string) {
-  // Step 1: Make Photoshop script jsx file
-  // Step 2: Execute that file}
+export async function runPreAction(shootId: string) {
+  const shoot = await getShoot(shootId)
+  const scriptPath = await createShootPreScript(shoot)
+  await runScript(scriptPath)
+  // TODO: Tell the app that prescript is run successfully
+}
+
+export async function runPostAction(shootId: string) {
+  const shoot = await getShoot(shootId)
+  const scriptPath = await createShootPostScript(shoot)
+  await runScript(scriptPath)
+  // TODO: Generate photos & put to cloud via sftp
 }
