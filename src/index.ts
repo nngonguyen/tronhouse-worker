@@ -1,6 +1,6 @@
 import chokidar from 'chokidar'
 
-import { createShootPostScript, createShootPreScript, getShoot, getShootId } from './shoots'
+import { createShootPostScript, createShootPreScript, getShoot } from './shoots'
 
 // TODO: Get root from api
 const root = '/Users/achilles/Workspaces/resources'
@@ -30,6 +30,7 @@ function checkShootStatusByRetouchedFile(filePath: string) {
 }
 
 export async function runScript(scriptPath: string) {
+  // TODO: use execAsync to run script
   console.log(scriptPath)
 }
 

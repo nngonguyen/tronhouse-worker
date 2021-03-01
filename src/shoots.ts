@@ -1,12 +1,11 @@
 import glob from 'fast-glob'
 import fs from 'fs'
+import got from 'got'
 import makeDir from 'make-dir'
 import path from 'path'
-import { stringify } from 'querystring'
-import { REPLServer } from 'repl'
 import { promisify } from 'util'
 
-import { getAssetsDir, getOriginalFilesPattern } from './config'
+import { getAppEndpoint, getAssetsDir } from './config'
 
 const writeFileAsync = promisify(fs.writeFile)
 
@@ -18,6 +17,7 @@ export interface Shoot {
   post_script_content: string
 }
 
+const endpoint = getAppEndpoint()
 const assetsDir = getAssetsDir()
 // const originalFilesPattern = getOriginalFilesPattern()
 
@@ -43,15 +43,15 @@ export async function createShootScripts(shoot: Shoot) {
 }
 
 export async function createShootPreScript(shoot: Shoot) {
-  const preScriptPath = shoot.paths['pre_script']
-  await makeDir(getAssetPath(path.dirname(preScriptPath)))
+  const preScriptPath = getAssetPath(shoot.paths['pre_script'])
+  await makeDir(path.dirname(preScriptPath))
   await writeFileAsync(preScriptPath, shoot.pre_script_content)
   return preScriptPath
 }
 
 export async function createShootPostScript(shoot: Shoot) {
-  const postScriptPath = shoot.paths['post_script']
-  await makeDir(getAssetPath(path.dirname(postScriptPath)))
+  const postScriptPath = getAssetPath(shoot.paths['post_script'])
+  await makeDir(path.dirname(postScriptPath))
   await writeFileAsync(postScriptPath, shoot.post_script_content)
   return postScriptPath
 }
@@ -78,7 +78,7 @@ export async function getOriginalFiles(filePath: string) {
   return filesToMap(fileNames)
 }
 
-export function filesToMap(files: string[]) {
+function filesToMap(files: string[]) {
   return files.reduce((acc: Record<string, string[]>, file) => {
     const tmp = file.split(/\//g)
     if (tmp.length === 1) {
@@ -99,12 +99,21 @@ export function filesToMap(files: string[]) {
 }
 
 export async function getShoot(shootId: string): Promise<Shoot> {
-  return undefined as any
+  const response = await got<Shoot>(`${endpoint}/shoots/${shootId}`, {
+    responseType: 'json',
+  })
+  return response.body
 }
 
-export function updateShootFiles(
+export async function updateShootFiles(
   shootId: string,
   { originalFiles }: { originalFiles: Record<string, string[]> },
 ) {
-  return 1
+  const response = await got.put<Shoot>(`${endpoint}/shoots/${shootId}/files`, {
+    body: JSON.stringify({
+      original_files: originalFiles,
+    }),
+    responseType: 'json',
+  })
+  return response.body
 }
