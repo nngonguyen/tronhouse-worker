@@ -1,6 +1,6 @@
 import chokidar from 'chokidar'
 
-import { createShootPostScript, createShootPreScript, getShoot } from './shoots'
+import { createShootPostScript, createShootPreScript, getShoot, getShootId } from './shoots'
 
 // TODO: Get root from api
 const root = '/Users/achilles/Workspaces/resources'
@@ -25,7 +25,7 @@ function checkShootStatusByOriginalFile(filePath: string) {
 }
 
 function checkShootStatusByRetouchedFile(filePath: string) {
-  const [, shootId] = filePath.split(/\//g).reverse()
+  const [, , shootId] = filePath.split(/\//g).reverse()
   return shootId
 }
 
