@@ -6,7 +6,7 @@ import { promisify } from 'util'
 
 const writeFileAsync = promisify(fs.writeFile)
 
-import { getAssetsDir } from '../config'
+import { getAssetsDir } from '../../config'
 import {
   createShootDirectories,
   createShootPostScript,
@@ -14,24 +14,8 @@ import {
   getAssetPath,
   getOriginalFiles,
   getShootId,
-  Shoot,
-} from '../shoots'
-
-const shoot: Shoot = {
-  id: '9HFxlk9v-1-Jb1J-hinh_chi_tiet-0',
-  paths: {
-    final: 'customers/J7dJ/9HFxlk9v/final/9HFxlk9v-1-Jb1J-hinh_chi_tiet-0',
-    original: 'orders/9HFxlk9v/9HFxlk9v-1-Jb1J-hinh_chi_tiet-0/original',
-    post_script: 'scripts/9HFxlk9v-1-Jb1J-hinh_chi_tiet-0/post.jsx',
-    pre_action: 'orders/9HFxlk9v/9HFxlk9v-1-Jb1J-hinh_chi_tiet-0/pre',
-    pre_script: 'scripts/9HFxlk9v-1-Jb1J-hinh_chi_tiet-0/pre.jsx',
-    preview: 'public/9HFxlk9v/9HFxlk9v-1-Jb1J-hinh_chi_tiet-0',
-    retouched: 'orders/9HFxlk9v/9HFxlk9v-1-Jb1J-hinh_chi_tiet-0/retouched',
-    wm: 'customers/J7dJ/9HFxlk9v/wm/9HFxlk9v-1-Jb1J-hinh_chi_tiet-0',
-  },
-  pre_script_content: 'var xxx // pre script',
-  post_script_content: 'var xxx // post script',
-}
+} from '../util'
+import { shoot } from './fixtures'
 
 const assetsDir = getAssetsDir()
 

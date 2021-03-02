@@ -11,6 +11,7 @@ devDependencies:
   '@babel/preset-typescript': 7.13.0_@babel+core@7.13.8
   '@typescript-eslint/eslint-plugin': 4.15.2_dcfd9166014d27a95aa168c9277ee0c5
   '@typescript-eslint/parser': 4.15.2_eslint@7.21.0+typescript@4.2.2
+  delay: 5.0.0
   eslint: 7.21.0
   eslint-config-prettier: 8.1.0_eslint@7.21.0
   eslint-plugin-jsx-a11y: 6.4.1_eslint@7.21.0
@@ -2840,6 +2841,12 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-1shh9DQ23L16oXSZKB2JxpL7iMy2E0S9d517ptA1P8iw0alkPtQcrKH7ru31rYtKwF499HkTu+DRzq3TCKDFRQ==
+  /delay/5.0.0:
+    dev: true
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-ReEBKkIfe4ya47wlPYf/gu5ib6yUG0/Aez0JQZQz94kiWtRQvZIQbTiehsnwHvLSWJnQdhVeqYue7Id1dKr0qw==
   /delayed-stream/1.0.0:
     dev: true
     engines:
@@ -6939,6 +6946,7 @@ specifiers:
   '@typescript-eslint/parser': ^4.15.2
   chokidar: ^3.5.1
   del: ^6.0.0
+  delay: ^5.0.0
   dotenv: ^8.2.0
   eslint: ^7.21.0
   eslint-config-prettier: ^8.1.0

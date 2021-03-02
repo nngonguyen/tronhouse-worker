@@ -1,0 +1,26 @@
+import got from 'got'
+
+import { getAppEndpoint } from '../config'
+import { Shoot } from './types'
+
+export const endpoint = getAppEndpoint()
+
+export async function getShoot(shootId: string): Promise<Shoot> {
+  const response = await got<Shoot>(`${endpoint}/shoots/${shootId}`, {
+    responseType: 'json',
+  })
+  return response.body
+}
+
+export async function updateShootFiles(
+  shootId: string,
+  { originalFiles }: { originalFiles: Record<string, string[]> },
+) {
+  const response = await got.put<Shoot>(`${endpoint}/shoots/${shootId}/files`, {
+    body: JSON.stringify({
+      original_files: originalFiles,
+    }),
+    responseType: 'json',
+  })
+  return response.body
+}

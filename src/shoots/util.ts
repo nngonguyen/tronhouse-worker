@@ -1,24 +1,16 @@
 import glob from 'fast-glob'
 import fs from 'fs'
-import got from 'got'
 import makeDir from 'make-dir'
 import path from 'path'
 import { promisify } from 'util'
 
-import { getAppEndpoint, getAssetsDir } from './config'
+import { getAppEndpoint, getAssetsDir } from '../config'
+import { Shoot } from './types'
 
 const writeFileAsync = promisify(fs.writeFile)
 
-export interface Shoot {
-  id: string
-  paths: Record<string, string>
-  original_files?: Record<string, string[]>
-  pre_script_content: string
-  post_script_content: string
-}
-
-const endpoint = getAppEndpoint()
-const assetsDir = getAssetsDir()
+export const endpoint = getAppEndpoint()
+export const assetsDir = getAssetsDir()
 // const originalFilesPattern = getOriginalFilesPattern()
 
 export function getAssetPath(filePath: string) {
@@ -78,7 +70,7 @@ export async function getOriginalFiles(filePath: string) {
   return filesToMap(fileNames)
 }
 
-function filesToMap(files: string[]) {
+export function filesToMap(files: string[]) {
   return files.reduce((acc: Record<string, string[]>, file) => {
     const tmp = file.split(/\//g)
     if (tmp.length === 1) {
@@ -96,24 +88,4 @@ function filesToMap(files: string[]) {
       }
     }
   }, {})
-}
-
-export async function getShoot(shootId: string): Promise<Shoot> {
-  const response = await got<Shoot>(`${endpoint}/shoots/${shootId}`, {
-    responseType: 'json',
-  })
-  return response.body
-}
-
-export async function updateShootFiles(
-  shootId: string,
-  { originalFiles }: { originalFiles: Record<string, string[]> },
-) {
-  const response = await got.put<Shoot>(`${endpoint}/shoots/${shootId}/files`, {
-    body: JSON.stringify({
-      original_files: originalFiles,
-    }),
-    responseType: 'json',
-  })
-  return response.body
 }
