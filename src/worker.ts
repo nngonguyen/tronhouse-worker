@@ -8,10 +8,9 @@ import { createShootDirectories } from './shoots/util'
 
 const debug = Debug('tronhouse-worker:worker')
 
-export const handleShootCreated: JobFunction = async (args) => {
-  const payload = args as Shoot
+export const handleShootCreated = async (payload: Shoot) => {
   try {
-    debug('shoot_created', args)
+    debug('shoot_created', payload)
     const shoot = await getShoot(payload.id)
     const tmp = await createShootDirectories(shoot)
     debug(tmp)
@@ -20,8 +19,7 @@ export const handleShootCreated: JobFunction = async (args) => {
   }
 }
 
-export const handleShootTransited: JobFunction = async (args) => {
-  const payload = args as Shoot
+export const handleShootTransited = async (payload: Shoot) => {
   try {
     debug('shoot_transited', payload.id)
     const shoot = await getShoot(payload.id)
@@ -38,10 +36,11 @@ export const handleShootTransited: JobFunction = async (args) => {
   }
 }
 
-export const handlePackageCreated: JobFunction = async (args) => {
-  const { id } = args as { id: string }
+export const handlePackageCreated = async ({ id }: { id: string }) => {
   const shoots = await getShootsByPackageId(id)
-  await Promise.all(shoots.map(createShootDirectories))
+  const files = await Promise.all(shoots.map(createShootDirectories))
+  debug(`Generate ${files.length} files`)
+  return files
 }
 
 async function run() {
@@ -51,9 +50,9 @@ async function run() {
     queues: ['default', 'nodejs'],
   })
 
-  worker.register('shoot_created', handleShootCreated)
-  worker.register('shoot_transited', handleShootTransited)
-  worker.register('package_created', handlePackageCreated)
+  worker.register('shoot_created', handleShootCreated as JobFunction)
+  worker.register('shoot_transited', handleShootTransited as JobFunction)
+  worker.register('package_created', handlePackageCreated as JobFunction)
 }
 
 run().catch(console.log)
