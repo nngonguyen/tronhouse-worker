@@ -12,8 +12,8 @@ export async function getShoot(shootId: string): Promise<Shoot> {
   return response.body
 }
 
-export async function getShootsByPackageId(packageId: string): Promise<Shoot> {
-  const response = await got<Shoot>(`${endpoint}/packages/${packageId}`, {
+export async function getShootsByPackageId(packageId: string): Promise<Shoot[]> {
+  const response = await got<Shoot[]>(`${endpoint}/packages/${packageId}`, {
     responseType: 'json',
   })
   return response.body
