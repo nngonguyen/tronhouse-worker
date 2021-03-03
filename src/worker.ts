@@ -3,17 +3,13 @@ import faktory from 'faktory-worker'
 import { JobFunction } from 'faktory-worker/lib/worker'
 
 import { getShoot } from './shoots/api'
+import { Shoot } from './shoots/types'
 import { createShootDirectories } from './shoots/util'
-
-export interface Args {
-  id: string
-  state: 'retouched' | 'shooted'
-}
 
 const debug = Debug('tronhouse-worker:worker')
 
 export const handleShootCreated: JobFunction = async (args) => {
-  const payload = args as Args
+  const payload = args as Shoot
   try {
     debug('shoot_created', args)
     const shoot = await getShoot(payload.id)
@@ -25,7 +21,7 @@ export const handleShootCreated: JobFunction = async (args) => {
 }
 
 export const handleShootTransited: JobFunction = async (args) => {
-  const payload = args as Args
+  const payload = args as Shoot
   try {
     debug('shoot_transited', payload.id)
     const shoot = await getShoot(payload.id)
@@ -40,6 +36,11 @@ export const handleShootTransited: JobFunction = async (args) => {
   } catch (err) {
     debug(err)
   }
+}
+
+export const handlePackageCreated: JobFunction = async (args) => {
+  const shoots = args as Shoot[]
+  await Promise.all(shoots.map(createShootDirectories))
 }
 
 async function run() {
