@@ -18,6 +18,7 @@
     "@babel/core": "^7.13.8",
     "@babel/preset-env": "^7.13.8",
     "@babel/preset-typescript": "^7.13.0",
+    "@types/debug": "^4.1.5",
     "@typescript-eslint/eslint-plugin": "^4.15.2",
     "@typescript-eslint/parser": "^4.15.2",
     "delay": "^5.0.0",
@@ -37,8 +38,10 @@
   },
   "dependencies": {
     "chokidar": "^3.5.1",
+    "debug": "^4.3.1",
     "del": "^6.0.0",
     "dotenv": "^8.2.0",
+    "faktory-worker": "^4.1.4",
     "fast-glob": "^3.2.5",
     "got": "^11.8.2",
     "make-dir": "^3.1.0"
