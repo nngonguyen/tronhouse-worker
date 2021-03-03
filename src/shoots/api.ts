@@ -24,9 +24,9 @@ export async function updateShootFiles(
   { originalFiles }: { originalFiles: Record<string, string[]> },
 ) {
   const response = await got.put<Shoot>(`${endpoint}/shoots/${shootId}/files`, {
-    body: JSON.stringify({
+    json: {
       original_files: originalFiles,
-    }),
+    },
     responseType: 'json',
   })
   return response.body
