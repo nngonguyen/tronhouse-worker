@@ -2,7 +2,7 @@ import Debug from 'debug'
 import faktory from 'faktory-worker'
 import { JobFunction } from 'faktory-worker/lib/worker'
 
-import { getShoot } from './shoots/api'
+import { getShoot, getShootsByPackageId } from './shoots/api'
 import { Shoot } from './shoots/types'
 import { createShootDirectories } from './shoots/util'
 
@@ -39,7 +39,8 @@ export const handleShootTransited: JobFunction = async (args) => {
 }
 
 export const handlePackageCreated: JobFunction = async (args) => {
-  const shoots = args as Shoot[]
+  const { id } = args as { id: string }
+  const shoots = await getShootsByPackageId(id)
   await Promise.all(shoots.map(createShootDirectories))
 }
 
