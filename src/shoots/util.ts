@@ -4,13 +4,12 @@ import makeDir from 'make-dir'
 import path from 'path'
 import { promisify } from 'util'
 
-import { getAppEndpoint, getAssetsDir } from '../config'
+import { getAssetsDir } from '../config'
 import { Shoot } from './types'
 
 const writeFileAsync = promisify(fs.writeFile)
 
-export const endpoint = getAppEndpoint()
-export const assetsDir = getAssetsDir()
+const assetsDir = getAssetsDir()
 // const originalFilesPattern = getOriginalFilesPattern()
 
 export function getAssetPath(filePath: string) {
@@ -48,10 +47,15 @@ export async function createShootPostScript(shoot: Shoot) {
   return postScriptPath
 }
 
+export function normalizePath(filePath: string) {
+  return filePath.replace(/\\/g, '/')
+}
+
 export function getShootId(filePath: string) {
   // orders/9HFxlk9v/9HFxlk9v-1-Jb1J-hinh_chi_tiet-0/original
   // Ignore order prefix & order id
-  const [, , shootId] = filePath.split(/\//g)
+  const tmp = normalizePath(getRelativePath(filePath)).split(/\//g).filter(Boolean)
+  const [, , shootId] = tmp
   return shootId
 }
 
@@ -61,10 +65,14 @@ export function getShootId(filePath: string) {
  * @param filePath The file that changed, have the format like: `<assets_dir>/orders/order-id/shoot-id/original/red.psd`
  */
 export async function getOriginalFiles(filePath: string) {
-  const relativePath = getRelativePath(filePath)
-  const [, orderId, shootId] = relativePath.split(/\//g)
-  const pattern = path.join(assetsDir, `orders/${orderId}/${shootId}/original/**/*.psd`)
-  const prefix = path.join(assetsDir, `orders/${orderId}/${shootId}/original/`)
+  const relativePath = getRelativePath(normalizePath(filePath))
+  const tmp = relativePath.split(/\//g).filter(Boolean)
+  const [, orderId, shootId] = tmp
+  const pattern = normalizePath(
+    path.join(assetsDir, `orders/${orderId}/${shootId}/original/**/*.psd`),
+  )
+  const prefix = normalizePath(path.join(assetsDir, `orders/${orderId}/${shootId}/original/`))
+
   const files = await glob(pattern)
   const fileNames = files.map((f) => f.replace(prefix, ''))
   return filesToMap(fileNames)

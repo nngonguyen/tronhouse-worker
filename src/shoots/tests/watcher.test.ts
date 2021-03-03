@@ -64,7 +64,7 @@ describe('watch original files', () => {
     const scope = createNock(shoot, listener)
 
     await makeMockFiles(shoot, ['red.psd'])
-    await delay(50)
+    await delay(150)
     const watcher = watchOriginalFiles()
 
     await makeMockFiles(shoot, ['green.psd'])
@@ -81,7 +81,7 @@ describe('watch original files', () => {
     const scope = createNock(shoot, listener)
 
     await makeMockFiles(shoot, ['red.psd'])
-    await delay(50)
+    await delay(150)
     const watcher = watchOriginalFiles()
 
     await makeMockFiles(shoot, ['extra/1.psd'])
@@ -100,7 +100,7 @@ describe('watch original files', () => {
     const scope = createNock(shoot, listener)
 
     const [file] = await makeMockFiles(shoot, ['red.psd', 'extra/1.psd', 'extra/2.psd'])
-    await delay(50)
+    await delay(150)
     const watcher = watchOriginalFiles()
 
     await writeFileAsync(file, 'updated data')
@@ -119,9 +119,9 @@ describe('watch original files', () => {
     const scope = createNock(shoot, listener)
 
     const [, file] = await makeMockFiles(shoot, ['red.psd', 'extra/1.psd', 'extra/2.psd'])
-    await delay(50)
+    await delay(150)
     const watcher = watchOriginalFiles()
-    await delay(50)
+    await delay(150)
     await del(file)
     await delay(300)
 

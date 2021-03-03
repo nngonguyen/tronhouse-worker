@@ -1,4 +1,5 @@
 import { config } from 'dotenv'
+import path from 'path'
 
 config()
 
@@ -12,7 +13,7 @@ export const getAppEndpoint = () => {
 
 export const getAssetsDir = () => {
   if (process.env.NODE_ENV === 'test') {
-    return '.assets/'
+    return path.resolve('.assets').replace(/\\/g, '/')
   }
   const assetsDir = process.env.TRONHOUSE_ASSETS_DIR
   if (!assetsDir) {

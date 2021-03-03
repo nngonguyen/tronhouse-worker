@@ -1,4 +1,5 @@
 import chokidar from 'chokidar'
+import path from 'path'
 
 import { getAssetsDir, getOriginalFilesPattern } from '../config'
 import { updateShootFiles } from './api'
@@ -8,7 +9,7 @@ const assetsDir = getAssetsDir()
 const originalFilesPattern = getOriginalFilesPattern()
 
 export function watchOriginalFiles() {
-  const pattern = `${assetsDir}${originalFilesPattern}`
+  const pattern = path.join(assetsDir, originalFilesPattern)
   return chokidar.watch(pattern, { ignoreInitial: true }).on('all', async (event, path) => {
     const filePath = path.replace(assetsDir, '')
     const shootId = getShootId(filePath)
