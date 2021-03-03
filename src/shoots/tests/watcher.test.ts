@@ -108,6 +108,7 @@ describe('watch original files', () => {
 
     const watcher = watchOriginalFiles()
 
+    await delay(300)
     await writeFileAsync(file, 'updated data')
     await delay(300)
 
@@ -128,7 +129,7 @@ describe('watch original files', () => {
 
     const watcher = watchOriginalFiles()
 
-    await delay(100)
+    await delay(300)
     await del(file)
     await delay(300)
 
