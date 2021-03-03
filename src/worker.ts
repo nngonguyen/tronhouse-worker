@@ -52,6 +52,7 @@ async function run() {
 
   worker.register('shoot_created', handleShootCreated)
   worker.register('shoot_transited', handleShootTransited)
+  worker.register('package_created', handlePackageCreated)
 }
 
 run().catch(console.log)
