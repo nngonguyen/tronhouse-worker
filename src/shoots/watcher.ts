@@ -14,7 +14,7 @@ export function watchOriginalFiles() {
     const filePath = path.replace(assetsDir, '')
     const shootId = getShootId(filePath)
     const originalFiles = await getOriginalFiles(filePath)
-    // console.log({ event, shootId, originalFiles, path })
-    await updateShootFiles(shootId, { originalFiles })
+    const result = await updateShootFiles(shootId, { originalFiles })
+    return result
   })
 }

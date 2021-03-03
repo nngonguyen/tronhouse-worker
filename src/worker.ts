@@ -5,6 +5,7 @@ import { JobFunction } from 'faktory-worker/lib/worker'
 import { getShoot, getShootsByPackageId } from './shoots/api'
 import { Shoot } from './shoots/types'
 import { createShootDirectories } from './shoots/util'
+import { watchOriginalFiles } from './shoots/watcher'
 
 const debug = Debug('tronhouse-worker:worker')
 
@@ -53,6 +54,8 @@ async function run() {
   worker.register('shoot_created', handleShootCreated as JobFunction)
   worker.register('shoot_transited', handleShootTransited as JobFunction)
   worker.register('package_created', handlePackageCreated as JobFunction)
+
+  watchOriginalFiles()
 }
 
 run().catch(console.log)
