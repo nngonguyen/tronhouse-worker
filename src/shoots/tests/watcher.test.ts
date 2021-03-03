@@ -8,7 +8,7 @@ import { promisify } from 'util'
 
 import { getAppEndpoint, getAssetsDir } from '../../config'
 import { Shoot } from '../types'
-import { getAssetPath } from '../util'
+import { createShootDirectories, getAssetPath } from '../util'
 import { watchOriginalFiles } from '../watcher'
 import { createShoot } from './fixtures'
 
@@ -19,12 +19,14 @@ async function makeMockFiles(shoot: Shoot, files: string[]) {
   const filePaths = files.map((f) => {
     return path.join(getAssetPath(shoot.paths.original), f)
   })
+  await delay(100)
   await Promise.all(
     filePaths.map(async (f) => {
       await makeDir(path.dirname(f))
       await writeFileAsync(f, 'Some content')
     }),
   )
+  await delay(300)
   return filePaths
 }
 
@@ -48,10 +50,11 @@ describe('watch original files', () => {
     const shoot = createShoot('id-01')
     const scope = createNock(shoot, listener)
 
+    await createShootDirectories(shoot)
     const watcher = watchOriginalFiles()
 
     await makeMockFiles(shoot, ['red.psd'])
-    await delay(300)
+
     watcher.close()
 
     expect(scope.isDone()).toBeTruthy()
@@ -63,12 +66,13 @@ describe('watch original files', () => {
     const shoot = createShoot('id-02')
     const scope = createNock(shoot, listener)
 
+    await createShootDirectories(shoot)
     await makeMockFiles(shoot, ['red.psd'])
-    await delay(150)
+
     const watcher = watchOriginalFiles()
 
     await makeMockFiles(shoot, ['green.psd'])
-    await delay(300)
+
     watcher.close()
 
     expect(scope.isDone()).toBeTruthy()
@@ -80,12 +84,12 @@ describe('watch original files', () => {
     const shoot = createShoot('id-03')
     const scope = createNock(shoot, listener)
 
+    await createShootDirectories(shoot)
     await makeMockFiles(shoot, ['red.psd'])
-    await delay(150)
+
     const watcher = watchOriginalFiles()
 
     await makeMockFiles(shoot, ['extra/1.psd'])
-    await delay(300)
 
     watcher.close()
     expect(scope.isDone()).toBeTruthy()
@@ -99,8 +103,9 @@ describe('watch original files', () => {
     const shoot = createShoot('id-03')
     const scope = createNock(shoot, listener)
 
+    await createShootDirectories(shoot)
     const [file] = await makeMockFiles(shoot, ['red.psd', 'extra/1.psd', 'extra/2.psd'])
-    await delay(150)
+
     const watcher = watchOriginalFiles()
 
     await writeFileAsync(file, 'updated data')
@@ -118,10 +123,12 @@ describe('watch original files', () => {
     const shoot = createShoot('id-03')
     const scope = createNock(shoot, listener)
 
+    await createShootDirectories(shoot)
     const [, file] = await makeMockFiles(shoot, ['red.psd', 'extra/1.psd', 'extra/2.psd'])
-    await delay(150)
+
     const watcher = watchOriginalFiles()
-    await delay(150)
+
+    await delay(100)
     await del(file)
     await delay(300)
 

@@ -54,7 +54,7 @@ export function normalizePath(filePath: string) {
 export function getShootId(filePath: string) {
   // orders/9HFxlk9v/9HFxlk9v-1-Jb1J-hinh_chi_tiet-0/original
   // Ignore order prefix & order id
-  const tmp = normalizePath(getRelativePath(filePath)).split(/\//g).filter(Boolean)
+  const tmp = getRelativePath(normalizePath(filePath)).split(/\//g).filter(Boolean)
   const [, , shootId] = tmp
   return shootId
 }
