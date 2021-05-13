@@ -19,6 +19,16 @@ export async function getShootsByPackageId(packageId: string): Promise<Shoot[]> 
   return response.body
 }
 
+export async function getPreScript(shootId: string): Promise<string> {
+  const response = await got(`${endpoint}/shoots/${shootId}/pre-script`)
+  return response.body
+}
+
+export async function getPostScript(shootId: string): Promise<string> {
+  const response = await got(`${endpoint}/shoots/${shootId}/post-script`)
+  return response.body
+}
+
 export async function updateShootFiles(
   shootId: string,
   { originalFiles }: { originalFiles: Record<string, string[]> },

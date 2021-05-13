@@ -4,7 +4,7 @@ import path from 'path'
 config()
 
 export const getAppEndpoint = () => {
-  const endpoint = process.env.TRONHOUSE_APP_ENDPOINT
+  const endpoint = process.env.TRONHOUSE_APP_ENDPOINT || 'https://app-api.tronhouse.vn'
   if (!endpoint) {
     throw new Error('Please provide TRONHOUSE_APP_ENDPOINT env')
   }

@@ -7,14 +7,7 @@ import { promisify } from 'util'
 const writeFileAsync = promisify(fs.writeFile)
 
 import { getAssetsDir } from '../../config'
-import {
-  createShootDirectories,
-  createShootPostScript,
-  createShootPreScript,
-  getAssetPath,
-  getOriginalFiles,
-  getShootId,
-} from '../util'
+import { createShootDirectories, getAssetPath, getOriginalFiles, getShootId } from '../util'
 import { shoot } from './fixtures'
 
 const assetsDir = getAssetsDir()
@@ -39,22 +32,6 @@ describe('shoots', () => {
         const exists = fs.existsSync(directory)
         expect(exists).toBeTruthy()
       })
-    })
-  })
-
-  describe('create pre script', () => {
-    it('valid', async () => {
-      const filePath = await createShootPreScript(shoot)
-      const content = fs.readFileSync(filePath, 'utf-8')
-      expect(content).toEqual(shoot.pre_script_content)
-    })
-  })
-
-  describe('create post script', () => {
-    it('valid', async () => {
-      const filePath = await createShootPostScript(shoot)
-      const content = fs.readFileSync(filePath, 'utf-8')
-      expect(content).toEqual(shoot.post_script_content)
     })
   })
 

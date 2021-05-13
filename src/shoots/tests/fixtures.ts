@@ -12,8 +12,6 @@ export const shoot: Shoot = {
     retouched: 'orders/9HFxlk9v/9HFxlk9v-1-Jb1J-hinh_chi_tiet-0/retouched',
     wm: 'customers/J7dJ/9HFxlk9v/wm/9HFxlk9v-1-Jb1J-hinh_chi_tiet-0',
   },
-  pre_script_content: 'var xxx // pre script',
-  post_script_content: 'var xxx // post script',
 }
 
 export function createShoot(id: string) {

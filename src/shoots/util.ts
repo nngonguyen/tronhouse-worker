@@ -5,6 +5,7 @@ import path from 'path'
 import { promisify } from 'util'
 
 import { getAssetsDir } from '../config'
+import { getPostScript, getPreScript } from './api'
 import { Shoot } from './types'
 
 const writeFileAsync = promisify(fs.writeFile)
@@ -26,24 +27,19 @@ export async function createShootDirectories(shoot: Shoot) {
   return directories
 }
 
-export async function createShootScripts(shoot: Shoot) {
-  const preScriptPath = shoot.paths['pre_script']
-  const postScriptPath = shoot.paths['post_script']
-  await writeFileAsync(preScriptPath, shoot.pre_script_content)
-  await writeFileAsync(postScriptPath, shoot.post_script_content)
-}
-
 export async function createShootPreScript(shoot: Shoot) {
   const preScriptPath = getAssetPath(shoot.paths['pre_script'])
+  const script = await getPreScript(shoot.id)
   await makeDir(path.dirname(preScriptPath))
-  await writeFileAsync(preScriptPath, shoot.pre_script_content)
+  await writeFileAsync(preScriptPath, script)
   return preScriptPath
 }
 
 export async function createShootPostScript(shoot: Shoot) {
   const postScriptPath = getAssetPath(shoot.paths['post_script'])
   await makeDir(path.dirname(postScriptPath))
-  await writeFileAsync(postScriptPath, shoot.post_script_content)
+  const script = await getPostScript(shoot.id)
+  await writeFileAsync(postScriptPath, script)
   return postScriptPath
 }
 
