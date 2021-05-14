@@ -1,12 +1,19 @@
 import got from 'got'
 
 import { getAppEndpoint } from '../config'
-import { Shoot } from './types'
+import { PackageItem, Shoot } from './types'
 
 export const endpoint = getAppEndpoint()
 
 export async function getShoot(shootId: string): Promise<Shoot> {
   const response = await got<Shoot>(`${endpoint}/shoots/${shootId}`, {
+    responseType: 'json',
+  })
+  return response.body
+}
+
+export async function getPackageItem(packageItemId: string): Promise<PackageItem> {
+  const response = await got<PackageItem>(`${endpoint}/package-items/${packageItemId}`, {
     responseType: 'json',
   })
   return response.body

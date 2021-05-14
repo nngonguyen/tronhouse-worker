@@ -2,6 +2,7 @@ import { Shoot } from '../types'
 
 export const shoot: Shoot = {
   id: '9HFxlk9v-1-Jb1J-hinh_chi_tiet-0',
+  package_item_id: '',
   paths: {
     final: 'customers/J7dJ/9HFxlk9v/final/9HFxlk9v-1-Jb1J-hinh_chi_tiet-0',
     original: 'orders/9HFxlk9v/9HFxlk9v-1-Jb1J-hinh_chi_tiet-0/original',
@@ -14,7 +15,7 @@ export const shoot: Shoot = {
   },
 }
 
-export function createShoot(id: string) {
+export function createShoot(id: string): Shoot {
   return {
     id,
     paths: {
@@ -27,7 +28,6 @@ export function createShoot(id: string) {
       retouched: `orders/9HFxlk9v/${id}/retouched`,
       wm: `customers/J7dJ/9HFxlk9v/wm/${id}`,
     },
-    pre_script_content: 'var xxx // pre script',
-    post_script_content: 'var xxx // post script',
+    package_item_id: '',
   }
 }

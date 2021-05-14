@@ -1,0 +1,33 @@
+{
+    "id": "AIMWEthIQBvc-1_0",
+    "shoots": [
+        {
+            "id": "AIMWEthIQBvc-1-NWEs-hinh_mat_truoc-0",
+            "paths": {
+                "final": "customers/8Z8Uj53jXOgo/AIMWEthIQBvc/final/AIMWEthIQBvc-1-NWEs-hinh_mat_truoc-0",
+                "original": "orders/AIMWEthIQBvc/AIMWEthIQBvc-1-NWEs-hinh_mat_truoc-0/original",
+                "post_script": "scripts/AIMWEthIQBvc-1-NWEs-hinh_mat_truoc-0/post.jsx",
+                "pre_action": "orders/AIMWEthIQBvc/AIMWEthIQBvc-1-NWEs-hinh_mat_truoc-0/pre",
+                "pre_script": "scripts/AIMWEthIQBvc-1-NWEs-hinh_mat_truoc-0/pre.jsx",
+                "preview": "public/AIMWEthIQBvc/AIMWEthIQBvc-1-NWEs-hinh_mat_truoc-0",
+                "retouched": "orders/AIMWEthIQBvc/AIMWEthIQBvc-1-NWEs-hinh_mat_truoc-0/retouched",
+                "wm": "customers/8Z8Uj53jXOgo/AIMWEthIQBvc/wm/AIMWEthIQBvc-1-NWEs-hinh_mat_truoc-0"
+            },
+            "state": "ready"
+        },
+        {
+            "id": "AIMWEthIQBvc-1-gNOq-hinh_mat_truoc-0",
+            "paths": {
+                "final": "customers/8Z8Uj53jXOgo/AIMWEthIQBvc/final/AIMWEthIQBvc-1-gNOq-hinh_mat_truoc-0",
+                "original": "orders/AIMWEthIQBvc/AIMWEthIQBvc-1-gNOq-hinh_mat_truoc-0/original",
+                "post_script": "scripts/AIMWEthIQBvc-1-gNOq-hinh_mat_truoc-0/post.jsx",
+                "pre_action": "orders/AIMWEthIQBvc/AIMWEthIQBvc-1-gNOq-hinh_mat_truoc-0/pre",
+                "pre_script": "scripts/AIMWEthIQBvc-1-gNOq-hinh_mat_truoc-0/pre.jsx",
+                "preview": "public/AIMWEthIQBvc/AIMWEthIQBvc-1-gNOq-hinh_mat_truoc-0",
+                "retouched": "orders/AIMWEthIQBvc/AIMWEthIQBvc-1-gNOq-hinh_mat_truoc-0/retouched",
+                "wm": "customers/8Z8Uj53jXOgo/AIMWEthIQBvc/wm/AIMWEthIQBvc-1-gNOq-hinh_mat_truoc-0"
+            },
+            "state": "ready"
+        }
+    ]
+}

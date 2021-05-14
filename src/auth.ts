@@ -84,16 +84,16 @@ async function initAuth(): Promise<OAuth2Client> {
 
 const drive = google.drive('v3')
 
-export async function uploadFile(fileName: string) {
-  const fileSize = fs.statSync(fileName).size
+export async function uploadFile(name: string, filePath: string) {
+  const fileSize = fs.statSync(filePath).size
   const res = await drive.files.create(
     {
       requestBody: {
-        name: 'packages/xxx-111',
+        name,
         // a requestBody element is required if you want to use multipart
       },
       media: {
-        body: fs.createReadStream(fileName),
+        body: fs.createReadStream(filePath),
       },
     },
     {
@@ -109,17 +109,9 @@ export async function uploadFile(fileName: string) {
   return res.data
 }
 
-async function run() {
+export async function run() {
   const auth = await initAuth()
   google.options({ auth })
   const result = await drive.files.list({ q: `name = 'packages/xxx-111'` })
   console.log(result.data)
-  // await uploadFile('./README.md')
-  /*
-  const params = { pageSize: 12 }
-  const res = await drive.files.list(params)
-  console.log(res.data)
-  */
 }
-
-run()

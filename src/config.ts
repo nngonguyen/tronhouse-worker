@@ -13,7 +13,7 @@ export const getAppEndpoint = () => {
 
 export const getAssetsDir = () => {
   if (process.env.NODE_ENV === 'test') {
-    return path.resolve('.assets').replace(/\\/g, '/')
+    return path.resolve('src/tests/fixtures').replace(/\\/g, '/')
   }
   const assetsDir = process.env.TRONHOUSE_ASSETS_DIR
   if (!assetsDir) {
