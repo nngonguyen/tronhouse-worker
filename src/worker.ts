@@ -18,6 +18,7 @@ export async function executePreScript(shoot: Shoot) {
   return new Promise((resolve, reject) => {
     exec(`"${photoshopPath}" "${scriptPath}"`, (error, stdout, stderr) => {
       if (error) {
+        // TODO: Save error into shoot
         reject(error.message)
         return
       }
