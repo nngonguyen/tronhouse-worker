@@ -2,7 +2,7 @@ import { Command } from 'commander'
 const program = new Command()
 
 import { getShoot } from './shoots/api'
-import { executePreScript } from './worker'
+import { ensurePreScript, executePreScript } from './worker'
 
 program
   .version('0.1.0')
@@ -13,6 +13,7 @@ program
     const shoot = await getShoot(shootId)
     console.log(`Got shoot data, start run pre-script`)
     try {
+      await ensurePreScript(shoot)
       await executePreScript(shoot)
       console.log(`Run prescript successfully!`)
       process.exit(0)

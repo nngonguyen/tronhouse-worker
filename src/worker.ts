@@ -3,15 +3,32 @@ import Debug from 'debug'
 import faktory from 'faktory-worker'
 import { JobFunction } from 'faktory-worker/lib/worker'
 
-import { uploadPackageItem } from './package-items'
-import { getShoot, getShootsByPackageId } from './shoots/api'
+import { downloadOrderImages } from './orders'
+// import { uploadPackageItem } from './package-items'
+import { getShoot, getShootsByPackageId, updateShootFiles } from './shoots/api'
 import { Shoot } from './shoots/types'
-import { createShootDirectories, createShootPreScript } from './shoots/util'
+import {
+  createShootDirectories,
+  createShootPreScript,
+  getOriginalFilesByShoot,
+} from './shoots/util'
 import { watchOriginalFiles } from './shoots/watcher'
 
 const debug = Debug('tronhouse-worker:worker')
 
 export const photoshopPath = 'C:/Program Files/Adobe/Adobe Photoshop 2021/Photoshop.exe'
+
+/**
+ * Download all order images, update shoot files to the latest state in case files is changed
+ * Retun the updated shoot
+ * @param shoot
+ */
+export async function ensurePreScript(shoot: Shoot) {
+  const originalFiles = await getOriginalFilesByShoot(shoot.order_id, shoot.id)
+  await updateShootFiles(shoot.id, { originalFiles })
+  await downloadOrderImages(shoot.order_id)
+  return getShoot(shoot.id)
+}
 
 export async function executePreScript(shoot: Shoot) {
   const scriptPath = await createShootPreScript(shoot)
@@ -37,8 +54,9 @@ export const handleShootTransited = async (payload: Shoot) => {
     const shoot = await getShoot(payload.id)
     switch (payload.state) {
       case 'shot':
+        await ensurePreScript(shoot)
         await executePreScript(shoot)
-        await uploadPackageItem(shoot.package_item_id)
+        // await uploadPackageItem(shoot.package_item_id)
         break
       case 'retouched':
         debug('Run post-action', shoot.id)
@@ -52,6 +70,7 @@ export const handleShootTransited = async (payload: Shoot) => {
 export const handlePackageCreated = async ({ id }: { id: string }) => {
   const shoots = await getShootsByPackageId(id)
   const files = await Promise.all(shoots.map(createShootDirectories))
+
   debug(`Generate ${files.length} files`)
   return files
 }

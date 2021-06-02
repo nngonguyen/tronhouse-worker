@@ -4,13 +4,14 @@ import makeDir from 'make-dir'
 import path from 'path'
 import { promisify } from 'util'
 
-import { getAssetsDir } from '../config'
+import { getAssetsDir, getScriptsDir } from '../config'
 import { getPostScript, getPreScript } from './api'
 import { Shoot } from './types'
 
 const writeFileAsync = promisify(fs.writeFile)
 
 const assetsDir = getAssetsDir()
+const scriptsDir = getScriptsDir()
 // const originalFilesPattern = getOriginalFilesPattern()
 
 export function getAssetPath(filePath: string) {
@@ -28,7 +29,7 @@ export async function createShootDirectories(shoot: Shoot) {
 }
 
 export async function createShootPreScript(shoot: Shoot) {
-  const preScriptPath = getAssetPath(shoot.paths['pre_script'])
+  const preScriptPath = path.join(scriptsDir, shoot.id, 'pre.js')
   const script = await getPreScript(shoot.id)
   await makeDir(path.dirname(preScriptPath))
   await writeFileAsync(preScriptPath, script)
@@ -36,7 +37,7 @@ export async function createShootPreScript(shoot: Shoot) {
 }
 
 export async function createShootPostScript(shoot: Shoot) {
-  const postScriptPath = getAssetPath(shoot.paths['post_script'])
+  const postScriptPath = path.join(scriptsDir, shoot.id, 'post.js')
   await makeDir(path.dirname(postScriptPath))
   const script = await getPostScript(shoot.id)
   await writeFileAsync(postScriptPath, script)
@@ -64,6 +65,10 @@ export async function getOriginalFiles(filePath: string) {
   const relativePath = getRelativePath(normalizePath(filePath))
   const tmp = relativePath.split(/\//g).filter(Boolean)
   const [, orderId, shootId] = tmp
+  return getOriginalFilesByShoot(orderId, shootId)
+}
+
+export async function getOriginalFilesByShoot(orderId: string, shootId: string) {
   const pattern = normalizePath(
     path.join(assetsDir, `orders/${orderId}/${shootId}/original/**/*.psd`),
   )

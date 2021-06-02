@@ -22,6 +22,11 @@ export const getAssetsDir = () => {
   return assetsDir
 }
 
+export const getScriptsDir = () => {
+  const assetsDir = getAssetsDir()
+  return path.join(assetsDir, 'scripts')
+}
+
 export const getOriginalFilesPattern = () => {
   const pattern = process.env.TRONHOUSE_ORIGINAL_FILES_PATTERN
   if (!pattern) {
