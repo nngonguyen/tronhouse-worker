@@ -29,7 +29,7 @@ export async function createShootDirectories(shoot: Shoot) {
 }
 
 export async function createShootPreScript(shoot: Shoot) {
-  const preScriptPath = path.join(scriptsDir, shoot.id, 'pre.js')
+  const preScriptPath = path.join(scriptsDir, shoot.id, 'pre.jsx')
   const script = await getPreScript(shoot.id)
   await makeDir(path.dirname(preScriptPath))
   await writeFileAsync(preScriptPath, script)
@@ -37,7 +37,7 @@ export async function createShootPreScript(shoot: Shoot) {
 }
 
 export async function createShootPostScript(shoot: Shoot) {
-  const postScriptPath = path.join(scriptsDir, shoot.id, 'post.js')
+  const postScriptPath = path.join(scriptsDir, shoot.id, 'post.jsx')
   await makeDir(path.dirname(postScriptPath))
   const script = await getPostScript(shoot.id)
   await writeFileAsync(postScriptPath, script)
