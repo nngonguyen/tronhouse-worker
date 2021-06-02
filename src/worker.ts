@@ -2,7 +2,10 @@ import { exec } from 'child_process'
 import Debug from 'debug'
 import faktory from 'faktory-worker'
 import { JobFunction } from 'faktory-worker/lib/worker'
+import fs from 'fs'
+import path from 'path'
 
+import { getAssetsDir } from './config'
 import { downloadOrderImages } from './orders'
 // import { uploadPackageItem } from './package-items'
 import { getShoot, getShootsByPackageId, updateShootFiles } from './shoots/api'
@@ -29,27 +32,42 @@ export async function ensurePreScript(shoot: Shoot) {
   return getShoot(shoot.id)
 }
 
-export async function executePreScript(shoot: Shoot) {
-  const scriptPath = await createShootPreScript(shoot)
+const assetsDir = getAssetsDir()
+
+async function execWithLock(cmd: string, lockFilePath: string, timeout = 120 * 1000) {
+  let timer = timeout
+  fs.writeFileSync(lockFilePath, '')
   return new Promise((resolve, reject) => {
-    exec(`"${photoshopPath}" "${scriptPath}"`, (error, stdout, stderr) => {
-      if (error) {
-        // TODO: Save error into shoot
-        reject(error.message)
-        return
-      }
-      if (stderr) {
-        reject(stderr)
-        return
-      }
-      resolve(true)
+    exec(cmd, () => {
+      const interval = setInterval(() => {
+        if (timer < 0) {
+          clearInterval(interval)
+          // Remove the lockFile if timeout
+          fs.unlinkSync(lockFilePath)
+          reject('Exec timeout')
+        }
+        const isRemoved = !fs.existsSync(lockFilePath)
+        if (isRemoved) {
+          clearInterval(interval)
+          resolve(true)
+        } else {
+          timer -= 1000
+        }
+      }, 1000)
     })
   })
 }
 
+export async function executePreScript(shoot: Shoot) {
+  const scriptPath = await createShootPreScript(shoot)
+  const lockFilePath = path.join(assetsDir, 'locks', `${shoot.id}.pre`)
+  const cmd = `"${photoshopPath}" "${scriptPath}"`
+  return execWithLock(cmd, lockFilePath)
+}
+
 export const handleShootTransited = async (payload: Shoot) => {
   try {
-    debug('shoot_transited', payload.id)
+    console.log('handle shoot_transited', payload.id, payload.state)
     const shoot = await getShoot(payload.id)
     switch (payload.state) {
       case 'shot':
@@ -58,11 +76,11 @@ export const handleShootTransited = async (payload: Shoot) => {
         // await uploadPackageItem(shoot.package_item_id)
         break
       case 'retouched':
-        debug('Run post-action', shoot.id)
+        console.log('Run post-action', shoot.id)
         return 1
     }
   } catch (err) {
-    debug(err)
+    console.error(err)
   }
 }
 
@@ -80,6 +98,7 @@ async function run() {
     password: 'a432cb46d5058a7b',
     queues: ['default', 'nodejs'],
     concurrency: 1,
+    poolSize: 1,
   })
 
   worker.register('package_created', handlePackageCreated as JobFunction)
