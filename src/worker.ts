@@ -12,7 +12,6 @@ import {
   createShootPreScript,
   getOriginalFilesByShoot,
 } from './shoots/util'
-import { watchOriginalFiles } from './shoots/watcher'
 
 const debug = Debug('tronhouse-worker:worker')
 
@@ -85,8 +84,6 @@ async function run() {
 
   worker.register('package_created', handlePackageCreated as JobFunction)
   worker.register('shoot_transited', handleShootTransited as JobFunction)
-
-  watchOriginalFiles()
 }
 
 run().catch(console.log)
