@@ -1,6 +1,6 @@
 import download from 'download'
-import fs from 'fs'
 import got from 'got'
+import makeDir from 'make-dir'
 import pMap from 'p-map'
 import path from 'path'
 
@@ -11,11 +11,10 @@ const assetsPath = getAssetsDir()
 
 async function downloadOrderImage(orderId: string, id: string) {
   const url = `https://assets.tronhouse.vn/44c369cc-1bfa-4f7b-87bd-8d93a48fdb32/origin/${id}`
-  const destPath = path.resolve(assetsPath, 'customer-upload', orderId, id)
-  if (fs.existsSync(destPath)) {
-    return
-  }
-  return download(url, `.data/${orderId}`)
+  const destPath = path.resolve(assetsPath, 'customer-upload', orderId)
+  makeDir(path.dirname(destPath))
+  console.log(`Download ${url} to ${destPath}`)
+  return download(url, destPath, { filename: id })
 }
 
 /**
