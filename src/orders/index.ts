@@ -3,8 +3,8 @@ import fs from 'fs'
 import got from 'got'
 import pMap from 'p-map'
 import path from 'path'
-import { getAssetsDir } from 'src/config'
 
+import { getAssetsDir } from '../config'
 import { endpoint } from '../shoots/api'
 
 const assetsPath = getAssetsDir()
