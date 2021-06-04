@@ -3,13 +3,15 @@ import fs from 'fs'
 import got from 'got'
 import pMap from 'p-map'
 import path from 'path'
+import { getAssetsDir } from 'src/config'
 
 import { endpoint } from '../shoots/api'
 
+const assetsPath = getAssetsDir()
+
 async function downloadOrderImage(orderId: string, id: string) {
   const url = `https://assets.tronhouse.vn/44c369cc-1bfa-4f7b-87bd-8d93a48fdb32/origin/${id}`
-  console.log(url)
-  const destPath = path.resolve('.data', orderId, id)
+  const destPath = path.resolve(assetsPath, 'customer-upload', orderId, id)
   if (fs.existsSync(destPath)) {
     return
   }
