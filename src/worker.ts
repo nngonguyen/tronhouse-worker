@@ -153,7 +153,7 @@ async function run() {
   const worker = await faktory.work({
     host: '192.53.114.99',
     password: 'a432cb46d5058a7b',
-    queues: ['default', 'nodejs'],
+    queues: ['nodejs'],
     concurrency: 1,
     poolSize: 1,
   })
