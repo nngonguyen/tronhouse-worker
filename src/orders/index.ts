@@ -4,8 +4,8 @@ import makeDir from 'make-dir'
 import pMap from 'p-map'
 import path from 'path'
 
-import { getAssetsDir } from '../config'
-import { endpoint } from '../shoots/api'
+import { getAssetsDir } from '../config.js'
+import { endpoint } from '../shoots/api.js'
 
 const assetsPath = getAssetsDir()
 

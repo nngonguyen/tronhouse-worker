@@ -1,3 +1,3 @@
-import { watchOriginalFiles } from './shoots/watcher'
+import { watchOriginalFiles } from './shoots/watcher.js'
 
 watchOriginalFiles()

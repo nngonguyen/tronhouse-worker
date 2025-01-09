@@ -1,9 +1,9 @@
 import chokidar from 'chokidar'
 import path from 'path'
 
-import { getAssetsDir, getOriginalFilesPattern } from '../config'
-import { updateShootFiles } from './api'
-import { getOriginalFiles, getShootId } from './util'
+import { getAssetsDir, getOriginalFilesPattern } from '../config.js'
+import { updateShootFiles } from './api.js'
+import { getOriginalFiles, getShootId } from './util.js'
 
 const assetsDir = getAssetsDir()
 const originalFilesPattern = getOriginalFilesPattern()

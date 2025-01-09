@@ -1,7 +1,7 @@
 import { Command } from 'commander'
 
-import { zipPackageItem } from './package-items'
-import { getPackageItem } from './shoots/api'
+import { zipPackageItem } from './package-items.js'
+import { getPackageItem } from './shoots/api.js'
 const program = new Command()
 
 program

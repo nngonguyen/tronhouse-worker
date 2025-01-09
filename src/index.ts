@@ -1,7 +1,7 @@
 import chokidar from 'chokidar'
 
-import { getShoot } from './shoots/api'
-import { createShootPostScript, createShootPreScript } from './shoots/util'
+import { getShoot } from './shoots/api.js'
+import { createShootPostScript, createShootPreScript } from './shoots/util.js'
 
 // TODO: Get root from api
 const root = '/Users/achilles/Workspaces/resources'

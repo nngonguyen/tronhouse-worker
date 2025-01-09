@@ -6,18 +6,17 @@ import fs from 'fs'
 import path from 'path'
 import { Client } from 'ssh2'; // Import SSH2 client
 
-import { getAssetsDir, getScriptsDir } from './config'
-import { downloadOrderImages } from './orders'
+import { getAssetsDir, getScriptsDir } from './config.js'
+import { downloadOrderImages } from './orders/index.js'
 // import { uploadPackageItem } from './package-items'
-import { getShoot, getShootsByPackageId, updateShootFiles } from './shoots/api'
-import { Shoot } from './shoots/types'
+import { getShoot, getShootsByPackageId, updateShootFiles } from './shoots/api.js'
+import { Shoot } from './shoots/types.js'
 import {
   createShootDirectories,
   createShootPostScript,
-  createShootPostScript,
   createShootPreScript,
   getOriginalFilesByShoot,
-} from './shoots/util'
+} from './shoots/util.js'
 
 const debug = Debug('tronhouse-worker:worker')
 
@@ -25,7 +24,7 @@ export const photoshopPath = 'C:/Program Files/Adobe/Adobe Photoshop 2025/Photos
 
 // SSH Configuration for preVM
 const sshConfig = {
-  host: '192.168.1.202', // Replace with preVM's IP
+  host: '192.168.1.4', // Replace with preVM's IP
   port: 22,
   username: 'admin',
   password: '2407',
@@ -79,9 +78,14 @@ export async function ensurePreScript(shoot: Shoot) {
 
 const assetsDir = getAssetsDir()
 const scriptsDir = getScriptsDir()
+const locksDir = path.join(getAssetsDir(), 'locks');
+
 // Modified execWithLock to run over SSH
 async function execWithLockOverSsh(cmd: string, lockFilePath: string, timeout = 120 * 1000) {
   let timer = timeout;
+  if (!fs.existsSync(locksDir)) {
+    fs.mkdirSync(locksDir, { recursive: true });
+  }
   fs.writeFileSync(lockFilePath, ''); // Create the lock file
   return new Promise((resolve, reject) => {
     runSshCommand(cmd)

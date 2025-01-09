@@ -1,7 +1,7 @@
 import got from 'got'
 
-import { getAppEndpoint } from '../config'
-import { PackageItem, Shoot } from './types'
+import { getAppEndpoint } from '../config.js'
+import { PackageItem, Shoot } from './types.js'
 
 export const endpoint = getAppEndpoint()
 

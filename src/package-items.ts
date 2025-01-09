@@ -3,10 +3,10 @@ import fs from 'fs'
 import makeDir from 'make-dir'
 import path from 'path'
 
-import { uploadFile } from './auth'
-import { getPackageItem } from './shoots/api'
-import { PackageItem } from './shoots/types'
-import { getAssetPath } from './shoots/util'
+import { uploadFile } from './auth.js'
+import { getPackageItem } from './shoots/api.js'
+import { PackageItem } from './shoots/types.js'
+import { getAssetPath } from './shoots/util.js'
 
 /**
  * Get all the pre.psd of the shoots of the package

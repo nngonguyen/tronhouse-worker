@@ -1,8 +1,8 @@
 import { Command } from 'commander'
 const program = new Command()
 
-import { getShoot } from './shoots/api'
-import { ensurePreScript, executePostScript, executePreScript } from './worker'
+import { getShoot } from './shoots/api.js'
+import { ensurePreScript, executePostScript, executePreScript } from './worker.js'
 
 program
   .version('0.1.0')

@@ -4,9 +4,9 @@ import makeDir from 'make-dir'
 import path from 'path'
 import { promisify } from 'util'
 
-import { getAssetsDir, getScriptsDir } from '../config'
-import { getPostScript, getPreScript } from './api'
-import { Shoot } from './types'
+import { getAssetsDir, getScriptsDir } from '../config.js'
+import { getPostScript, getPreScript } from './api.js'
+import { Shoot } from './types.js'
 
 const writeFileAsync = promisify(fs.writeFile)
 
