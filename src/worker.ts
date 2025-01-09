@@ -78,11 +78,12 @@ export async function ensurePreScript(shoot: Shoot) {
 
 const assetsDir = getAssetsDir()
 const scriptsDir = getScriptsDir()
-const locksDir = path.join(getAssetsDir(), 'locks');
 
 // Modified execWithLock to run over SSH
 async function execWithLockOverSsh(cmd: string, lockFilePath: string, timeout = 120 * 1000) {
   let timer = timeout;
+  const locksDir = path.join(getAssetsDir(), 'locks');
+
   if (!fs.existsSync(locksDir)) {
     fs.mkdirSync(locksDir, { recursive: true });
   }
