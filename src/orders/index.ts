@@ -10,7 +10,9 @@ import { endpoint } from '../shoots/api'
 const assetsPath = getAssetsDir()
 
 async function downloadOrderImage(orderId: string, id: string) {
-  const url = `https://assets.tronhouse.vn/44c369cc-1bfa-4f7b-87bd-8d93a48fdb32/origin/${id}`
+  let url = `https://assets.tronhouse.vn/44c369cc-1bfa-4f7b-87bd-8d93a48fdb32/origin/${id}`
+  url = decodeURI(url);
+  url = encodeURI(url);
   const destPath = path.resolve(assetsPath, 'customer-upload', orderId)
   makeDir(path.dirname(destPath))
   console.log(`Download ${url} to ${destPath}`)

@@ -1,14 +1,13 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
   "editor.formatOnSave": true,
-  "eslint.validate": [
-    "typescript",
-  ],
+  "eslint.validate": ["typescript"],
+  "files.eol": "\n",
   "[typescript]": {
     "editor.formatOnSave": false
   },
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "deno.enable": false
 }
