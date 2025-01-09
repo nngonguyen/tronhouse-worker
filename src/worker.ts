@@ -14,6 +14,7 @@ import { Shoot } from './shoots/types'
 import {
   createShootDirectories,
   createShootPostScript,
+  createShootPostScript,
   createShootPreScript,
   getOriginalFilesByShoot,
 } from './shoots/util'
@@ -67,6 +68,9 @@ async function runSshCommand(command: string): Promise<string> {
 export async function ensurePreScript(shoot: Shoot) {
   const originalFiles = await getOriginalFilesByShoot(shoot.order_id, shoot.id)
   await updateShootFiles(shoot.id, { originalFiles })
+  if (!fs.existsSync) {
+    await downloadOrderImages(shoot.order_id)
+  }
   if (!fs.existsSync) {
     await downloadOrderImages(shoot.order_id)
   }
@@ -131,6 +135,10 @@ export const handleShootTransited = async (payload: Shoot) => {
         // await uploadPackageItem(shoot.package_item_id)
         break
       case 'retouched':
+
+        await executePostScript(shoot)
+        // console.log('Run post-action', shoot.id)
+        // return 1
 
         await executePostScript(shoot)
         // console.log('Run post-action', shoot.id)
