@@ -12,13 +12,14 @@ import { getShoot, getShootsByPackageId, updateShootFiles } from './shoots/api'
 import { Shoot } from './shoots/types'
 import {
   createShootDirectories,
+  createShootPostScript,
   createShootPreScript,
   getOriginalFilesByShoot,
 } from './shoots/util'
 
 const debug = Debug('tronhouse-worker:worker')
 
-export const photoshopPath = 'C:/Program Files/Adobe/Adobe Photoshop 2021/Photoshop.exe'
+export const photoshopPath = 'C:/Program Files/Adobe/Adobe Photoshop 2024/Photoshop.exe'
 
 /**
  * Download all order images, update shoot files to the latest state in case files is changed
@@ -28,7 +29,9 @@ export const photoshopPath = 'C:/Program Files/Adobe/Adobe Photoshop 2021/Photos
 export async function ensurePreScript(shoot: Shoot) {
   const originalFiles = await getOriginalFilesByShoot(shoot.order_id, shoot.id)
   await updateShootFiles(shoot.id, { originalFiles })
-  await downloadOrderImages(shoot.order_id)
+  if (!fs.existsSync) {
+    await downloadOrderImages(shoot.order_id)
+  }
   return getShoot(shoot.id)
 }
 
@@ -65,6 +68,13 @@ export async function executePreScript(shoot: Shoot) {
   return execWithLock(cmd, lockFilePath)
 }
 
+export async function executePostScript(shoot: Shoot) {
+  const scriptPath = await createShootPostScript(shoot)
+  const lockFilePath = path.join(assetsDir, 'locks', `${shoot.id}.post`)
+  const cmd = `"${photoshopPath}" "${scriptPath}"`
+  return execWithLock(cmd, lockFilePath)
+}
+
 export const handleShootTransited = async (payload: Shoot) => {
   try {
     console.log('handle shoot_transited', payload.id, payload.state)
@@ -76,8 +86,10 @@ export const handleShootTransited = async (payload: Shoot) => {
         // await uploadPackageItem(shoot.package_item_id)
         break
       case 'retouched':
-        console.log('Run post-action', shoot.id)
-        return 1
+
+        await executePostScript(shoot)
+        // console.log('Run post-action', shoot.id)
+        // return 1
     }
   } catch (err) {
     console.error(err)
